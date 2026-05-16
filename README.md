@@ -1,58 +1,367 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Gerenciamento de Contratos
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gerenciamento de contratos desenvolvido em Laravel com arquitetura em camadas, API REST, Vue.js, Docker e testes automatizados.
 
-## About Laravel
+O projeto permite:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- gerenciamento de clientes;
+- gerenciamento de serviços;
+- gerenciamento de contratos;
+- gerenciamento de itens do contrato;
+- cálculo de valor total do contrato;
+- interface SPA utilizando Vue.js.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# Funcionalidades Implementadas
 
-## Learning Laravel
+## Clientes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Cadastro de clientes
+- Atualização de clientes
+- Remoção de clientes
+- Listagem paginada
+- Relacionamento com contratos
+- Regras de validação
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Serviços
 
-## Agentic Development
+- Cadastro de serviços
+- Atualização de serviços
+- Remoção de serviços
+- Listagem paginada
+- Relacionamento com itens do contrato
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## Contratos
 
-php artisan boost:install
+- Cadastro de contratos
+- Atualização de contratos
+- Cancelamento de contratos
+- Listagem paginada
+- Relacionamento com cliente
+- Relacionamento com itens
+- Cálculo de valor total
+- Aplicação de regras de desconto
+- Regra para impedir alteração de contratos cancelados
+- Regra para impedir criação de contratos para clientes inativos
+
+---
+
+## Itens do Contrato
+
+- Adição de itens ao contrato
+- Atualização de itens
+- Remoção de itens
+- Relacionamento com serviços
+- Cálculo de subtotal
+
+---
+
+## API REST
+
+- Endpoints RESTful
+- Versionamento inicial (`/api/v1`)
+- Retorno em JSON
+- Paginação
+- API consumida pelo frontend Vue.js
+
+---
+
+## Frontend Vue.js
+
+- Interface SPA
+- Consumo da API REST
+- Componentização
+- Integração com Axios
+
+---
+
+## Regras de Negócio
+
+- Policies do Laravel
+- Contratos cancelados não podem ser alterados
+- Clientes inativos não podem criar contratos
+- Serviços vinculados não podem ser removidos
+
+---
+
+## Testes Automatizados
+
+- Testes unitários dos serviços
+- Cenários de sucesso
+- Cenários de erro
+- SQLite em memória para testes
+
+---
+
+## Estrutura Docker
+
+- PHP 8.4 FPM
+- Nginx
+- MySQL 8
+- Docker Compose
+- Multi-stage Dockerfile
+- Node 20
+
+---
+
+# Tecnologias Utilizadas
+
+## Backend
+
+- Laravel 12
+- PHP 8.4
+- Eloquent ORM
+- Service Layer
+- Policies
+- Form Requests
+
+---
+
+## Frontend
+
+- Vue.js
+- Axios
+- Vite
+
+---
+
+## Banco de Dados
+
+- MySQL 8
+- SQLite (testes)
+
+---
+
+## Infraestrutura
+
+- Docker
+- Docker Compose
+- Nginx
+- Node.js
+
+---
+
+## Testes
+
+- PHPUnit
+- Laravel Testing
+
+---
+
+# Estrutura do Projeto
+
+```text
+app/
+├── Http/
+│   ├── Controllers/
+│   └── Requests/
+├── Models/
+├── Policies/
+├── Providers/
+├── Services/
+│   └── Contract/
+│       └── Rules/
+
+database/
+├── factories/
+├── migrations/
+└── seeders/
+
+tests/
+├── Feature/
+└── Unit/
+
+resources/
+└── js/
+    ├── pages/
+    └── services/
+
+docker/
+└── nginx/
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+# Como Rodar o Projeto
 
-## Contributing
+## Pré-requisitos
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Antes de iniciar, é necessário ter instalado:
 
-## Code of Conduct
+- Docker
+- Docker Compose
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 1. Clonar o repositório
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+git clone https://github.com/jao241/contratos_laravel
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 2. Entrar na pasta do projeto
+
+```bash
+cd contratos_laravel
+```
+
+---
+
+## 3. Copiar o arquivo de ambiente
+
+```bash
+cp .env.example .env
+```
+
+---
+
+## 4. Subir os containers Docker
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+## 5. Gerar chave da aplicação
+
+```bash
+docker compose exec app php artisan key:generate
+```
+
+---
+
+## 6. Executar migrations
+
+```bash
+docker compose exec app php artisan migrate
+```
+
+---
+
+## 7. Frontend Vue.js
+
+O serviço Node já executa automaticamente:
+
+- npm install
+- npm run dev
+
+Caso seja necessário reiniciar o frontend:
+
+```bash
+docker compose restart node
+```
+
+---
+
+## 8. Acessar o projeto
+
+### Backend/API
+
+```text
+http://localhost:8000/api/v1
+```
+
+### Frontend Vue.js
+
+```text
+http://localhost:8000
+```
+
+---
+
+## Executando os testes
+
+```bash
+docker compose exec app php artisan test
+```
+
+---
+
+## Parando os containers
+
+```bash
+docker compose down
+```
+
+---
+
+# Serviços Docker
+
+O projeto utiliza os seguintes serviços:
+
+| Serviço | Descrição              |
+| ------- | ---------------------- |
+| app     | Container PHP/Laravel  |
+| nginx   | Servidor web           |
+| mysql   | Banco de dados MySQL   |
+| node    | Frontend Vue.js + Vite |
+
+---
+
+# Endpoints da API
+
+Todas as rotas da API utilizam o prefixo:
+
+```text
+/api/v1
+```
+
+As respostas são retornadas em formato JSON.
+
+---
+
+# Clientes
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/api/v1/clients` | Listar clientes |
+| POST | `/api/v1/clients` | Criar cliente |
+| GET | `/api/v1/clients/{client}` | Buscar cliente |
+| PUT | `/api/v1/clients/{client}` | Atualizar cliente |
+| PATCH | `/api/v1/clients/{client}` | Atualização parcial do cliente |
+| DELETE | `/api/v1/clients/{client}` | Remover cliente |
+
+---
+
+# Serviços
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/api/v1/services` | Listar serviços |
+| POST | `/api/v1/services` | Criar serviço |
+| GET | `/api/v1/services/{service}` | Buscar serviço |
+| PUT | `/api/v1/services/{service}` | Atualizar serviço |
+| PATCH | `/api/v1/services/{service}` | Atualização parcial do serviço |
+| DELETE | `/api/v1/services/{service}` | Remover serviço |
+
+---
+
+# Contratos
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/api/v1/contracts` | Listar contratos |
+| POST | `/api/v1/contracts` | Criar contrato |
+| GET | `/api/v1/contracts/{contract}` | Buscar contrato |
+| PUT | `/api/v1/contracts/{contract}` | Atualizar contrato |
+| PATCH | `/api/v1/contracts/{contract}` | Atualização parcial do contrato |
+| DELETE | `/api/v1/contracts/{contract}` | Remover contrato |
+| PATCH | `/api/v1/contracts/{contract}/cancel` | Cancelar contrato |
+
+---
+
+# Itens do Contrato
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| POST | `/api/v1/contracts/{contract}/items` | Adicionar item ao contrato |
+| PUT | `/api/v1/contract-items/{contractItem}` | Atualizar item do contrato |
+| DELETE | `/api/v1/contract-items/{contractItem}` | Remover item do contrato |
+
+---
