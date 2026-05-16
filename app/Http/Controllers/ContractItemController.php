@@ -16,8 +16,7 @@ class ContractItemController extends Controller
 {
     public function __construct(
         protected ContractItemService $itemService
-    ) {
-    }
+    ) {}
 
     public function store(
         StoreContractItemRequest $request,
@@ -25,15 +24,9 @@ class ContractItemController extends Controller
     ): JsonResponse {
         $this->authorize('addItem', $contract);
 
-        $item = $this->itemService->create(
-            $contract,
-            $request->validated()
-        );
+        $items = $this->itemService->createMany($contract, array_values($request->validated()));
 
-        return response()->json(
-            $item,
-            201
-        );
+        return response()->json($items, 201);
     }
 
     public function update(

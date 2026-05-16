@@ -45,8 +45,6 @@ class ClientController extends Controller
         UpdateClientRequest $request,
         Client $client
     ): JsonResponse {
-        $this->authorize('update', $client);
-
         $client = $this->clientService->update(
             $client,
             $request->validated()

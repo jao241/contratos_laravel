@@ -14,21 +14,20 @@ class StoreContractItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service_id' => [
-                'required',
-                'exists:services,id',
-            ],
-
-            'quantity' => [
+            '*.quantity' => [
                 'required',
                 'integer',
                 'min:1',
             ],
-
-            'unit_price' => [
+            '*.unit_price' => [
                 'required',
                 'numeric',
                 'min:0',
+            ],
+            '*.service_id' => [
+                'required',
+                'integer',
+                'exists:services,id',
             ],
         ];
     }

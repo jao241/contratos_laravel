@@ -14,7 +14,7 @@ class ContractService
         return Contract::query()
             ->with([
                 'client',
-                'items.service',
+                'items',
             ])
             ->latest()
             ->paginate(10);

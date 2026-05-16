@@ -31,7 +31,7 @@ class StoreContractRequest extends FormRequest
             ],
 
             'status' => [
-                'required',
+                'nullable',
                 'in:active,cancelled',
             ],
         ];

@@ -17,13 +17,17 @@ class ContractController extends Controller
     public function __construct(
         protected ContractService $contractService,
         protected ContractCalculatorService $calculatorService
-    ) {
-    }
+    ) {}
 
     public function index(): JsonResponse
     {
         return response()->json(
-            $this->contractService->paginate()
+            $this->contractService->paginate()->through(function (Contract $contract) {
+                $contract->load(['items.service']);
+                return array_merge($contract->toArray(), [
+                    'total' => $this->calculatorService->calculate($contract),
+                ]);
+            })
         );
     }
 
