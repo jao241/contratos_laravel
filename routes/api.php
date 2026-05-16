@@ -4,14 +4,9 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractItemController;
 use App\Http\Controllers\ServiceController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    // Route::get('/user', function (Request $request) {
-    //     return $request->user();
-    // })->middleware('auth:sanctum');
-
     Route::apiResource(
         'clients',
         ClientController::class
