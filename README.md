@@ -8,6 +8,7 @@ O projeto permite:
 - gerenciamento de serviços;
 - gerenciamento de contratos;
 - gerenciamento de itens do contrato;
+- criação e visualização de histórico de mudanças no contrato;
 - cálculo de valor total do contrato;
 - interface SPA utilizando Vue.js.
 
@@ -42,8 +43,10 @@ O projeto permite:
 - Atualização de contratos
 - Cancelamento de contratos
 - Listagem paginada
+- Salvar histórico de modficação de contratos
 - Relacionamento com cliente
 - Relacionamento com itens
+- Relacionamento com histórico do contrato
 - Cálculo de valor total
 - Aplicação de regras de desconto
 - Regra para impedir alteração de contratos cancelados
@@ -58,6 +61,13 @@ O projeto permite:
 - Remoção de itens
 - Relacionamento com serviços
 - Cálculo de subtotal
+
+---
+
+## Histórico do Contrato
+
+- Adição de histórico de modificações do contrato
+- Listagem paginada
 
 ---
 
@@ -353,6 +363,7 @@ As respostas são retornadas em formato JSON.
 | PATCH | `/api/v1/contracts/{contract}` | Atualização parcial do contrato |
 | DELETE | `/api/v1/contracts/{contract}` | Remover contrato |
 | PATCH | `/api/v1/contracts/{contract}/cancel` | Cancelar contrato |
+| GET | `/api/v1/contracts/{contract}/histories` | Buscar historico do contrato |
 
 ---
 

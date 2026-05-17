@@ -11,6 +11,7 @@ O sistema permite:
 - gerenciamento de serviços;
 - gerenciamento de contratos;
 - gerenciamento de itens de contrato;
+- criação e visualização de histórico de mudanças no contrato;
 - cálculo de valores;
 - aplicação de regras de domínio;
 - consumo via API REST.
@@ -221,6 +222,30 @@ Responsável por aplicar desconto baseado na quantidade de itens.
 
 ---
 
+## Histórico de Alterações dos Contratos
+
+Toda alteração realizada em contratos é registrada automaticamente em histórico, permitindo rastreabilidade completa das operações realizadas no sistema.
+
+Os registros de histórico são gerados para:
+
+- criação de contratos;
+- atualização de informações;
+- cancelamento de contratos;
+- alterações de status;
+- modificações de campos relevantes.
+
+Cada registro armazena:
+
+- ação executada;
+- campo alterado;
+- valor anterior;
+- novo valor;
+- data da alteração.
+
+Essa abordagem permite auditoria das operações e maior controle sobre o ciclo de vida dos contratos.
+
+---
+
 # Testes Automatizados
 
 Foram implementados:
@@ -285,8 +310,7 @@ Adicionar:
 
 Implementar:
 - auditoria;
-- versionamento de contratos;
-- rastreamento de alterações.
+- rastreamento de alterações. (implementado parcialmente em contratos)
 
 ---
 
@@ -314,6 +338,23 @@ Criar pipeline automatizada:
 - testes;
 - lint;
 - deploy.
+
+---
+
+## Interface
+
+Melhorias planejadas para a interface:
+
+- Adicionar filtros e busca nas listagens;
+- Exibir mensagens amigáveis para erros e exceções da API;
+- Implementar responsividade para dispositivos móveis;
+- Exibir mensagens de validação nos campos do formulário;
+- Agrupar ações da tabela em menus recolhíveis;
+- Adicionar estados de loading durante requisições;
+- Melhorar feedback visual para ações de sucesso;
+- Implementar confirmação visual antes de exclusões;
+- Melhorar organização visual dos contratos e itens;
+- Adicionar paginação mais avançada no frontend.
 
 ---
 
