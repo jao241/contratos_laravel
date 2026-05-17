@@ -6,7 +6,6 @@ use App\Http\Requests\Contract\StoreContractRequest;
 use App\Http\Requests\Contract\UpdateContractRequest;
 
 use App\Models\Contract;
-
 use App\Services\Contract\ContractCalculatorService;
 use App\Services\Contract\ContractService;
 
@@ -22,13 +21,7 @@ class ContractController extends Controller
     public function index(): JsonResponse
     {
         return response()->json(
-            $this->contractService->paginate()->through(function (Contract $contract) {
-                $contract->load(['items.service']);
-                return array_merge($contract->toArray(), [
-                    'total' => $this->calculatorService->calculate($contract),
-                ]);
-            })
-        );
+            $this->contractService->paginate());
     }
 
     public function store(

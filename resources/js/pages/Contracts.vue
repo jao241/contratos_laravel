@@ -49,7 +49,7 @@
                         <select v-model="form.status"
                             class="h-9 px-3 text-sm bg-[#faf9f7] border border-[#e8e5df] rounded-lg text-[#1a1917] focus:outline-none focus:border-[#1a1917] transition-colors">
                             <option value="active">Ativo</option>
-                            <option value="inactive">Inativo</option>
+                            <option value="cancelled">Cancelado</option>
                         </select>
                     </div>
                 </div>
@@ -198,6 +198,76 @@
             </div>
         </transition>
 
+        <!-- History panel -->
+        <transition name="slide">
+            <div v-if="historyModal" class="bg-white border border-[#e8e5df] rounded-xl p-5 mb-6">
+
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-[10px] text-[#aaa] uppercase tracking-widest font-medium">
+                        Histórico — {{ selectedHistoryContract?.client?.name }}
+                    </p>
+
+                    <button @click="historyModal = false"
+                        class="text-xs text-[#999] border border-[#e8e5df] px-3 py-1 rounded-md hover:bg-[#faf9f7] transition-colors cursor-pointer">
+                        Fechar
+                    </button>
+                </div>
+
+                <div v-if="histories.length === 0" class="py-8 text-center text-sm text-[#ccc]">
+                    Nenhum histórico encontrado.
+                </div>
+
+                <div v-else class="border border-[#e8e5df] rounded-lg overflow-hidden">
+
+                    <div class="bg-[#faf9f7] border-b border-[#e8e5df] grid grid-cols-5 px-4 py-2">
+                        <span class="text-[10px] text-[#aaa] uppercase tracking-widest font-medium">
+                            Ação
+                        </span>
+
+                        <span class="text-[10px] text-[#aaa] uppercase tracking-widest font-medium">
+                            Campo
+                        </span>
+
+                        <span class="text-[10px] text-[#aaa] uppercase tracking-widest font-medium">
+                            Valor Antigo
+                        </span>
+
+                        <span class="text-[10px] text-[#aaa] uppercase tracking-widest font-medium">
+                            Novo Valor
+                        </span>
+
+                        <span class="text-[10px] text-[#aaa] uppercase tracking-widest font-medium text-right">
+                            Data
+                        </span>
+                    </div>
+
+                    <div v-for="history in histories" :key="history.id"
+                        class="grid grid-cols-5 px-4 py-3 border-b border-[#f0ede8] last:border-b-0 items-center">
+
+                        <p class="text-sm font-medium text-[#1a1917]">
+                            {{ historyActionLabel(history.action) }}
+                        </p>
+
+                        <p class="text-sm text-[#888]">
+                            {{ history.field ?? '—' }}
+                        </p>
+
+                        <p class="text-sm text-[#888]">
+                            {{ history.old_value ?? '—' }}
+                        </p>
+
+                        <p class="text-sm text-[#888]">
+                            {{ history.new_value ?? '—' }}
+                        </p>
+
+                        <p class="text-sm text-[#888] text-right">
+                            {{ formatDate(history.created_at) }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
         <!-- Contracts table -->
         <div class="bg-white border border-[#e8e5df] rounded-xl overflow-hidden">
             <table class="w-full text-sm">
@@ -235,6 +305,10 @@
                         <td class="px-4 py-3 font-medium text-[#1a1917]">R$ {{ Number(c.total).toFixed(2) }}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-2 justify-end">
+                                <button @click="viewHistory(c)"
+                                    class="text-xs text-[#888] border border-[#e8e5df] px-3 py-1 rounded-md hover:bg-[#f0ede8] hover:text-[#1a1917] transition-colors cursor-pointer">
+                                    Histórico
+                                </button>
                                 <button @click="viewItems(c)"
                                     class="text-xs text-[#888] border border-[#e8e5df] px-3 py-1 rounded-md hover:bg-[#f0ede8] hover:text-[#1a1917] transition-colors cursor-pointer">
                                     Itens
@@ -317,6 +391,9 @@ export default {
                 next_page_url: null,
             },
             form: { id: null, client_id: "", start_date: "", end_date: "", status: "active" },
+            historyModal: false,
+            histories: [],
+            selectedHistoryContract: null,
         };
     },
     computed: {
@@ -360,6 +437,7 @@ export default {
         openForm() {
             this.reset();
             this.showItems = false;
+            this.historyModal = false;
             this.showForm = true;
         },
         edit(contract) {
@@ -373,11 +451,13 @@ export default {
             this.existingItems = contract.items ? [...contract.items] : [];
             this.items = [];
             this.showItems = false;
+            this.historyModal = false;
             this.showForm = true;
         },
         viewItems(contract) {
             this.selectedContract = contract;
             this.showForm = false;
+            this.historyModal = false;
             this.showItems = true;
         },
         addItem(service) {
@@ -392,27 +472,23 @@ export default {
             this.items.splice(index, 1);
         },
         async removeExistingItem(itemId) {
-            // DELETE /v1/contract-items/{contractItem}
             await api.delete(`/v1/contract-items/${itemId}`);
             this.existingItems = this.existingItems.filter(i => i.id !== itemId);
         },
         async save() {
             if (this.form.id) {
-                // PUT /v1/contracts/{contract}
-                await api.put(`/v1/contracts/${this.form.id}`, {
+                const { data } = await api.put(`/v1/contracts/${this.form.id}`, {
                     client_id: this.form.client_id,
                     start_date: this.form.start_date,
                     end_date: this.form.end_date,
                     status: this.form.status
                 });
                 if (this.items.length > 0) {
-                    // POST /v1/contracts/{contract}/items
                     await api.post(`/v1/contracts/${this.form.id}/items`, {
                         ...this.items,
                     });
                 }
             } else {
-                // POST /v1/contracts
                 const { data } = await api.post("/v1/contracts", {
                     client_id: this.form.client_id,
                     start_date: this.form.start_date,
@@ -420,7 +496,6 @@ export default {
                     status: this.form.status
                 });
                 if (this.items.length > 0) {
-                    // POST /v1/contracts/{contract}/items
                     await api.post(`/v1/contracts/${data.id}/items`, {
                         ...this.items,
                     });
@@ -431,12 +506,10 @@ export default {
             this.load(this.pagination.current_page);
         },
         async cancel(id) {
-            // PATCH /v1/contracts/{contract}/cancel
             await api.patch(`/v1/contracts/${id}/cancel`);
             this.load(this.pagination.current_page);
         },
         async remove(id) {
-            // DELETE /v1/contracts/{contract}
             await api.delete(`/v1/contracts/${id}`);
             this.load(this.pagination.current_page);
         },
@@ -461,6 +534,27 @@ export default {
                 cancelled: `${base} bg-[#fffbeb] text-[#92400e]`,
             };
             return map[s] ?? `${base} bg-[#f5f4f0] text-[#888]`;
+        },
+        async viewHistory(contract) {
+            const { data } = await api.get(
+                `/v1/contracts/${contract.id}/histories`
+            );
+
+            this.histories = data.data ?? data;
+            this.selectedHistoryContract = contract;
+
+            this.showItems = false;
+            this.showForm = false;
+            this.historyModal = true;
+        },
+        historyActionLabel(action) {
+            const map = {
+                created: 'Criação',
+                updated: 'Atualização',
+                cancelled: 'Cancelamento',
+            };
+
+            return map[action] ?? action;
         },
     },
 };

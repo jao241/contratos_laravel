@@ -32,4 +32,11 @@ class Contract extends Model
     {
         return $this->hasMany(ContractItem::class);
     }
+
+    public function histories(): HasMany
+    {
+        return $this->hasMany(
+            ContractHistory::class
+        );
+    }
 }

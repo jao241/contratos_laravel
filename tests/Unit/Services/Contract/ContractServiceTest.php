@@ -45,6 +45,8 @@ class ContractServiceTest extends TestCase
 
         $service->create([
             'client_id' => 999999,
+            'start_date' => now()->format('Y-m-d'),
+            'end_date' => now()->addMonth()->format('Y-m-d'),
             'status' => 'active',
         ]);
     }

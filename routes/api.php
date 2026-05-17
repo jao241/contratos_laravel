@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\ContractHistoryController;
 use App\Http\Controllers\ContractItemController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
@@ -40,5 +41,10 @@ Route::prefix('v1')->group(function () {
     Route::delete(
         'contract-items/{contractItem}',
         [ContractItemController::class, 'destroy']
+    );
+
+    Route::get(
+        'contracts/{contract}/histories',
+        [ContractHistoryController::class, 'index']
     );
 });
